@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "@tailwindcss/typography": "^0.5.10",
+    "daisyui": "^4.7.3",
+    "express": "^4.18.3",
+    "node": "^21.7.1"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "tw:build": "tailwindcss build -i ./public/css/tailwind.css -o ./public/css/main.css"
+  },
+  "name": "y2-web",
+  "version": "1.0.0",
+  "main": "server.js",
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
