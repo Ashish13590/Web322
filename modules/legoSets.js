@@ -63,11 +63,24 @@ function getSetByNum(setNum) {
     });
 }
 
-// function to get a set by theme name
+// // function to get a set by theme name
+// function getSetsByTheme(theme) {
+//     return new Promise((resolve, reject) => {
+//         const filteredSets = sets.filter(set => {
+//             return set.theme.toLowerCase()===(theme.toLowerCase());
+//         });
+//         if (filteredSets.length > 0) {
+//             resolve(filteredSets);
+//         } else {
+//             reject("Sets not found for the given theme.");
+//         }
+//     });
+// }
+
 function getSetsByTheme(theme) {
     return new Promise((resolve, reject) => {
         const filteredSets = sets.filter(set => {
-            return set.theme.toLowerCase()===(theme.toLowerCase());
+            set.theme.toLowerCase().includes(theme.toLowerCase());
         });
         if (filteredSets.length > 0) {
             resolve(filteredSets);
