@@ -174,7 +174,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "module.exports": {
+  "module.exports" : {
     "content": ["./views/**/*.html"]
   }
 }
