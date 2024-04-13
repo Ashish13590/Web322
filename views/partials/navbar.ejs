@@ -1,1 +1,36 @@
 
+<!-- <nav class="navbar bg-base-100" >
+
+    <div >
+      <a href="/" class="btn btn-ghost normal-case text-xl <%= page === '/' ? 'active' : '' %>">Lego Set Collections</a>
+    </div>
+    
+    <div class=" navbar-end" >
+      <ul class="menu menu-sm dropdown-content right-0 mt-3 z-[1] p-2" tableindex="0">
+        <li><a class="<%= page === '/about' ? 'active' : '' %>" href="/about">About</a></li>
+        
+      </ul>
+  </div>
+  </nav> -->
+  <!-- <nav tabindex="0"  class="navbar bg-base-100" >
+
+    <div class="flex">
+      <a href="/" class="btn btn-ghost normal-case text-xl <%= page === '/' ? 'active' : '' %>">Lego Set Collections</a>
+    
+      <div class="navbar-end" >
+        <ul tabindex="0" class="menu menu-sm dropdown-content right-0 mt-3 z-[1] p-2" >
+          <a class="<%= page === '/about' ? 'active' : '' %>" href="/about">About</a>
+        </ul>
+      </div>
+    </div>
+</nav> -->
+<nav tabindex="0" class="navbar bg-base-100">
+  <div class="flex justify-between items-center"> <!-- Use justify-between to distribute items horizontally -->
+    <a href="/" class="btn btn-ghost normal-case text-xl <%= page === '/' ? 'active' : '' %>">Lego Set Collections</a>
+    <div tabindex="0",class="navbar-end">
+      <ul tabindex="0" class="menu menu-sm dropdown-content right-0 mt-3 z-[1] p-2">
+        <li><a class="<%= page === '/about' ? 'active' : '' %>" href="/about">About</a></li> <!-- Wrap in an <li> element -->
+      </ul>
+    </div>
+  </div>
+</nav>
