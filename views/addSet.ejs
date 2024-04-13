@@ -1,0 +1,48 @@
+<!-- form.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add LEGO Set</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+   
+    <div class="container mx-auto ">
+        <h1>Add LEGO Set</h1>
+        <form action="/lego/add" method="POST">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="year">Year:</label>
+                <input type="text" id="year" name="year" required>
+            </div>
+            <div class="form-group">
+                <label for="num_parts">Number of Parts:</label>
+                <input type="number" id="num_parts" name="num_parts" required>
+            </div>
+            <div class="form-group">
+                <label for="img_url">Image URL:</label>
+                <input type="text" id="img_url" name="img_url" required>
+            </div>
+            <div class="form-group">
+                <label for="theme">Theme:</label>
+                <select id="theme" name="theme" required>
+                    <option value="City">City</option>
+                    <option value="Star Wars">Star Wars</option>
+                    <option value="Ninjago">Ninjago</option>
+                    <option value="Technic">Technic</option>
+                    <!-- Add more options as needed -->
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</body>
+
+</html>

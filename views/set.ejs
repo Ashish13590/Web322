@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lego Set Details</title>
+    <link rel="stylesheet" href="/css/main.css"/>
+
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            //const set = JSON.stringify(set) ;
+                
+
+            document.getElementById('set-name').textContent = set.name;
+            document.getElementById('set-blurb').textContent = `Below are the details of the set: ${set.name}`;
+            document.getElementById('set-image').src = set.img_url;
+            document.getElementById('set-name-detail').textContent = set.name;
+            document.getElementById('set-year').textContent = set.year;
+            document.getElementById('set-theme').textContent = set.theme;
+            document.getElementById('set-parts').textContent = set.num_parts;
+
+            fetch("https://quotable.io/random")
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("quote").textContent = `${data.content} - ${data.author}`;
+                })
+                .catch(error => console.error("Error fetching quote:", error));
+            });
+    </script>
+
+
+</head>
+
+<body tabindex="0">
+    <%- include('partials/navbar', {page: ''}) %>
+
+    <div class="hero">
+        <h1 id="set-name"></h1>
+        <p id="set-blurb"></p>
+    </div>
+
+
+    <div class="container mx-auto ">
+        <div class="hero bg-base-200 rounded-lg p-6">
+            <div class="hero-content text-center">
+                <div class="max-w-md">
+                    
+                    <div><strong> Newly Added Item </strong></div>
+                    <img id="set-image" src="<%= set.img_url %>" alt="Lego Set Image">
+                    
+                    <p><strong>Name:</strong> <%= set.name %><span id="set-name-detail"></span></p>
+                    <p><strong>Year:</strong> <%= set.year %> <span id="set-year"></span></p>
+                    <p><strong>Theme:</strong> <%= set.theme %> <span id="set-theme"></span></p>
+                    <p><strong>Number of Parts:</strong> <%= set.num_parts %><span id="set-parts"></span></p>
+                    <br> 
+                    <p><a class="btn btn-primary" href="/lego/sets/">show more</a></p>   
+                </div>  
+            </div>
+        </div>
+    </div>
+    <br>
+    <div style="text-align:center">
+        <a class="btn btn-primary" href="/">return to homepage</a>
+    </div>
+
+
+
+</body>
+</html>
