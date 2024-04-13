@@ -1,3 +1,4 @@
+            
 /********************************************************************************
 * WEB322 – Assignment 03
 * 
@@ -10,79 +11,98 @@
 * Published URL: https://cloudy-fly-slacks.cyclic.app/
 *
 ********************************************************************************/
-
-
 const legoData = require("./modules/legoSets");
-const path = require('path');
 const express = require('express');
-const app = express();
+const path = require('path');
 
-const PORT = process.env.PORT || 4000;
+const app = express();
+const PORT = process.env.PORT || 3200;
 
 app.use(express.static('public'));
+app.set('views', path.join(__dirname, 'views'));
 
+app.set('view engine', 'ejs');
+app.use(express.urlencoded({ extended: true }));
 
-        // Routes
-        app.get("/", (req, res) => {
-            res.sendFile(path.join(__dirname,"views/index.html"));        
-        });
-
-        
-        app.get("/about", (req, res)=>{
-            res.sendFile(path.join(__dirname, "/views/about.html"));
-        })
-
-        // this route gets result for the getallsets function
-        app.get("/lego/sets", async (req, res) => {
-            // retreiving data
-            if(req.query.name){
-            //getting the information of set who has icon theme of function getsetbynum 
-                let sets = await legoData.getSetsByTheme(req.params.name);
-                res.send(sets);
-            }
-            else{
-                let sets = await legoData.getAllSets();
-                res.json(sets);
-            }
-        });
-        
-        // this route gets result for the getSetByNum function 
-        app.get("/lego/sets/:set_num", async (req, res) => {
-            try {
-                // getting the information of set who has 10323-1 set_number  of function getsetbynum  
-                const set = await legoData.getSetByNum(req.params.set_num);
-                res.json(set);
-            } catch (error) {
-                res.status(404).send("Error: Set not found.");
-            }
-        });
-
-          
-         // this route gets result for the getSetByTheme function 
-        // app.get("/lego/sets/:name", async (req, res) => {
-        //     try {
-        //         //getting the information of set who has icon theme of function getsetbynum 
-        //         const sets = await legoData.getSetsByTheme(req.params.name);
-        //         res.send(sets);
-        //     } catch (error) {
-        //         res.status(404).send("Error: Sets not found for the given theme.");
-        //     }
-        // });
-
-
-        app.use((req, res) => {
-            res.status(404).sendFile(path.join(__dirname, '/views/404.html'));
-        });
-        // Start the server
-        
-        // Initialize Lego Data
-        legoData.initialize()
-        .then(() => { 
-            app.listen(PORT, () => {
-                console.log(`Server is running on port "http://localhost:${PORT}"`);
-            });
-        })
-    .catch((error) => {
-        console.error("Failed to initialize Lego Data:", error);
+legoData.initialize().then(() => {          
+    app.listen(PORT, () => {
+        console.log(`Server is running on port http://localhost:${PORT}`);
     });
+}).catch((err)=> {
+    console.error("Failed to initialize the port");
+});
 
+
+
+app.get("/", (req, res) => {
+    res.render("index.ejs", { page: "/" });
+});
+
+
+
+// Route to fetch LEGO sets by set number
+app.get("/lego/sets", async (req, res) => {
+    try {
+        let sets = [];
+        if (req.query.set_num) {
+            sets = await legoData.getAllTheme(req.query.set_num);
+        } else {
+            sets = await legoData.getAllSets();
+        }
+        res.render("sets", { sets: sets });
+    } catch (error) {
+        res.status(404).render("404", { message: "Error: Sets not found for the given theme." });
+    }
+});
+
+// Route to handle about page
+app.get("/about", (req, res) => {
+    res.render("about", { pages: "/about" });
+});
+
+// Route to handle editing a LEGO set
+app.get("/lego/editSet/:num", async (req, res) => {
+    try {
+        const set = await legoData.getSetByNum(req.params.num);
+        const themes = await legoData.getAllThemes(); // Assuming this function exists
+        if (!set) {
+            return res.status(404).render('404', { page: "", message: "Set not found." });
+        }
+        res.render("editSet", { set, themes, page: "/lego/editSet" });
+    } catch (error) {
+        res.status(500).render('500', { message: error.message });
+    }
+});
+
+// Route to handle editing a LEGO set (POST method)
+app.post("/lego/editSet", async (req, res) => {
+    try {
+        await legoData.editSet(req.body.num, req.body);
+        res.redirect("/lego/sets");
+    } catch (error) {
+        res.status(500).render('500', { message: "Error encountered in editSet function/file" });  
+    }
+});
+
+// Route to handle deleting a LEGO set
+app.get("/lego/deleteSet/:num", async (req, res) => {
+    try {
+        await legoData.deleteSet(req.params.num);
+        res.redirect("/lego/sets");
+    } catch (error) {
+        res.status(500).render('500', { message: `Error encountered: ${error.message}` });
+    }
+});
+
+// Generic error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).render('error'); // Render the error view
+});
+
+// 404 Route
+app.use((req, res) => {
+    res.status(404).render('404', { page: "" });
+});
+
+module.exports=app;
