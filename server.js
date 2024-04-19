@@ -57,6 +57,19 @@ app.get("/lego/sets", async (req, res) => {
     }
 });
 
+app.get("/lego/sets/:set_num", async (req, res) => {
+    try {
+        const set = await legoData.getSetByNum(req.params.set_num);
+        if (set) {
+            res.render("set", { set: set, page: "/lego/sets/:set_num" });
+        } else {
+            res.status(404).render('404', { page: "" }); // Rendering 404 page if set not found
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
 // Route to handle about page
 app.get("/about", (req, res) => {
     res.render("about", { pages: "/about" });
