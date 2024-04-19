@@ -37,7 +37,7 @@ legoData.initialize().then(() => {
 
 
 app.get("/", async (req, res) => {
-    res.render("index.ejs", { page: "/" });
+    res.render("index", { page: "/" });
 });
 
 
