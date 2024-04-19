@@ -13,13 +13,13 @@
             //const set = JSON.stringify(set) ;
                 
 
-            document.getElementById('set-name').textContent = set.name;
-            document.getElementById('set-blurb').textContent = `Below are the details of the set: ${set.name}`;
-            document.getElementById('set-image').src = set.img_url;
-            document.getElementById('set-name-detail').textContent = set.name;
-            document.getElementById('set-year').textContent = set.year;
-            document.getElementById('set-theme').textContent = set.theme;
-            document.getElementById('set-parts').textContent = set.num_parts;
+            document.getElementById('set-name').textContent = '<%= set.name %>';
+            document.getElementById('set-blurb').textContent = `Below are the details of the set: '<%= set.name %>'`;
+            document.getElementById('set-image').src = '<%= set.img_url %>';
+            document.getElementById('set-name-detail').textContent = '<%= set.name %>';
+            document.getElementById('set-year').textContent = '<%= set.year %>';
+            document.getElementById('set-theme').textContent = '<%= set.theme %>';
+            document.getElementById('set-parts').textContent = '<%= set.num_parts %>';
 
             fetch("https://quotable.io/random")
                 .then(response => response.json())
