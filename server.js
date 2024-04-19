@@ -47,7 +47,7 @@ app.get("/lego/sets", async (req, res) => {
     try {
         let sets = [];
         if (req.query.set_num) {
-            sets = await legoData.getAllTheme(req.query.set_num);
+            sets = await legoData.getSetByNum(req.query.set_num);
         } else {
             sets = await legoData.getAllSets();
         }
