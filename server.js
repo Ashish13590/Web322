@@ -46,11 +46,9 @@ app.get("/", async (req, res) => {
 app.get("/lego/sets", async (req, res) => {
     try {
         let sets = [];
-        if (req.query.set_num) {
-            sets = await legoData.getSetByNum(req.query.set_num);
-        } else {
+        
             sets = await legoData.getAllSets();
-        }
+        
         res.render("sets", { sets: sets });
     } catch (error) {
         res.status(404).render("404", { message: "Error: Sets not found for the given theme." });
