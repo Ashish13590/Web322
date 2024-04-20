@@ -1,5 +1,3 @@
-
-
 //made mistake in conversion of csv to json
 // i forgot to add this line at the top :set_num,name,year,theme_id,num_parts,img_url
 // so i was receving data whose catefory name was replaced with the first record of csv file
@@ -13,84 +11,121 @@
 // }
 
 // Importing setData and themeData module
-const setData = require("../data/setData");
-const themeData = require("../data/themeData");
+require('dotenv').config();
+const mongoose = require('mongoose');
+let Schema = mongoose.Schema;
 
-// Initialize empty array of sets
-let sets = [];
+mongoose.connect('mongodb+srv://aasavaliya:<UDB+42c(u@cneyN>@cluster0.exfskbg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
 
-function initialize() {
-    return new Promise((resolve, reject) => {
-        var i=0; // for counting number of records
-        try {
-            setData.forEach(set => {
-                i++;
-                // finding data and if matches then assigning it
-                const theme = themeData.find(theme => theme.id === set.theme_id);
-                set.theme = theme ? theme.name : "Unknown Theme";
-            });
-            sets = setData; // Assign the updated setData array to sets
-            console.log(`Successfully read ${i} records`);
-            resolve(); // Resolve the promise
-        } catch (err) {
-            reject(err); // Reject the promise if an error occurs
-        }
-    });
+const setData = require("../data/setData.json");
+const themeData = require("../data/themeData.json");
+
+
+const themeSchema = new mongoose.Schema({
+    id: String,
+    name: String,
+  });
+  
+  const setSchema = new mongoose.Schema({
+    set_num: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    name: String,
+    year: String,
+    num_parts: String,
+    theme_id: String,
+    img_url: String,
+  });
+  
+
+
+
+// Set.belongsTo(Theme, { foreignKey: "theme_id" });
+
+
+ async function initialize() {
+    try {
+        await sequelize.authenticate();
+        await sequelize.sync();
+        
+    } catch (error) {
+        console.error('Database not connected:', error);
+    }
 }
 
 
 
 // Function to get all sets
-function getAllSets() {
-    return new Promise((resolve, reject) => {
-        if (sets.length > 0) {
-            resolve(sets);
-        } else {
-            reject("Sets data not available.");
-        }
-    });
+async function getAllSets() {
+    try {
+        const sets = await Set.findAll({ include: [Theme] });
+        return sets;
+      } catch (error) {
+        console.error("Error getting all sets:", error);
+      }
 }
 
 // Function to get a set by set number
-function getSetByNum(setNum) {
-    return new Promise((resolve, reject) => {
-        const set = sets.find(set => set.set_num === setNum);
-        if (set) {
-            resolve(set);
-        } else {
-            reject("Set not found.");
-        }
+async function getSetByNum(setNumber) {
+    let sets= await Set.findOne({
+        where: {set_num:setNumber},
+        include: [Theme]
     });
+    return set;
 }
 
-// // function to get a set by theme name
-// function getSetsByTheme(theme) {
-//     return new Promise((resolve, reject) => {
-//         const filteredSets = sets.filter(set => {
-//             return set.theme.toLowerCase()===(theme.toLowerCase());
-//         });
-//         if (filteredSets.length > 0) {
-//             resolve(filteredSets);
-//         } else {
-//             reject("Sets not found for the given theme.");
-//         }
-//     });
-// }
+async function addSet(newSetData){
+    try{
+        // await Set.createData(setData);
+        await Set.create(newSetData);
+    } catch (error) {
+        throw new Error("Error encountered in function addSet: " + error.message);
+    }
+}
 
-function getSetsByTheme(theme) {
-    return new Promise((resolve, reject) => {
-        const filteredSets = sets.filter(set => {
-            set.theme.toLowerCase().includes(theme.toLowerCase());
+async function editSet(setNum, setData) {
+    try {
+        await Set.update(setData, {
+            where: { set_num: setNum }
         });
-        if (filteredSets.length > 0) {
-            resolve(filteredSets);
-        } else {
-            reject("Sets not found for the given theme.");
-        }
-    });
+    } catch (error) {
+        throw new Error("Error encountered in function editSet: " + error.message);
+    }
+}
+
+async function deleteSet(setNum) {
+    try {
+        await Set.destroy({
+            where: { set_num: setNum }
+        });
+    } catch (error) {
+            throw new Error("Error encountered in function deleteSet: " + error.message);
+    }
+}
+
+
+
+// function to get a set by theme name
+async function getAllTheme() {
+    try {
+        return await Theme.findAll();
+    } catch (error) {
+        throw new Error("Error encountered in function getAllThemes: " + error.message);
+    }
+}
+
+async function addTheme(themeData){
+    try {
+        await Theme.create(themeData);
+    } catch (error) {
+        throw new Error("Error encountered in function getAllThemes: " + error.message);
+    }
 }
 
 
 // exporting the function
-module.exports = { initialize, getAllSets, getSetByNum, getSetsByTheme };
+module.exports = { initialize, getAllSets, getSetByNum, getAllSets,
+                    addSet,editSet,deleteSet,addTheme };
 
