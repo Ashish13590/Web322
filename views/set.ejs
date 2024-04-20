@@ -14,7 +14,7 @@
                 
 
             document.getElementById('set-name').textContent = '<%= set.name %>';
-            document.getElementById('set-blurb').textContent = `Below are the details of the set: '<%= set.name %>'`;
+            document.getElementById('set-blurb').innerHTML = `<p>Below are the details of the set: '<%= set.name %>'</p>`;
             document.getElementById('set-image').src = '<%= set.img_url %>';
             document.getElementById('set-name-detail').textContent = '<%= set.name %>';
             document.getElementById('set-year').textContent = '<%= set.year %>';
